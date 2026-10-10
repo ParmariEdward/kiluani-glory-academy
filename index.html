@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#092b59">
+  <meta name="description" content="Kiluani Glory Academy — God Is Our Light. Connect students, alumni, teachers, parents and founders.">
+  <title>Kiluani Glory Academy | God Is Our Light</title>
+
+  <style>
+    :root {
+      --blue: #092b59;
+      --blue-light: #174a83;
+      --gold: #e7b943;
+      --cream: #fffaf0;
+      --white: #ffffff;
+      --text: #202b3a;
+      --muted: #657184;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      background: var(--blue);
+      color: white;
+      padding: 18px 5%;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .topbar {
+      max-width: 1150px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .school-symbol {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      font-size: 27px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .brand h1 {
+      font-size: 19px;
+      line-height: 1.25;
+    }
+
+    .brand p {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 17px;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: var(--gold);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #092b59, #174a83);
+      color: white;
+      text-align: center;
+      padding: 76px 20px 82px;
+      border-bottom: 7px solid var(--gold);
+    }
+
+    .hero-inner {
+      max-width: 850px;
+      margin: auto;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      font-size: clamp(30px, 6vw, 54px);
+      line-height: 1.15;
+      margin: 18px 0;
+    }
+
+    .hero h2 span {
+      color: var(--gold);
+    }
+
+    .hero p {
+      max-width: 680px;
+      margin: 0 auto 26px;
+      color: #edf3fc;
+      font-size: 16px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 21px;
+      margin: 5px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--blue);
+    }
+
+    .btn-outline {
+      border: 1px solid white;
+      color: white;
+    }
+
+    .btn:hover {
+      opacity: 0.88;
+    }
+
+    main {
+      max-width: 1150px;
+      margin: auto;
+      padding: 45px 20px;
+    }
+
+    section {
+      margin-bottom: 54px;
+      scroll-margin-top: 20px;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .section-heading h2 {
+      color: var(--blue);
+      font-size: 27px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .welcome {
+      background: white;
+      border-left: 5px solid var(--gold);
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px #092b5910;
+    }
+
+    .welcome h3 {
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 17px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e5e9ef;
+      border-radius: 10px;
+      padding: 23px;
+      box-shadow: 0 4px 14px #092b5908;
+    }
+
+    .card .symbol {
+      font-size: 29px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      color: var(--blue);
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .activity-card {
+      border-top: 3px solid var(--gold);
+    }
+
+    .tag {
+      display: inline-block;
+      background: #fff2c9;
+      color: #694d08;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 28px 18px;
+      border: 1px dashed #b7c3d3;
+      background: white;
+      border-radius: 8px;
+      color: var(--muted);
+    }
+
+    .empty-state strong {
+      display: block;
+      color: var(--blue);
+      margin-bottom: 6px;
+    }
+
+    .community {
+      background: #eef3fa;
+      border-radius: 12px;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .community h2 {
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+
+    .community p {
+      max-width: 680px;
+      margin: 0 auto 18px;
+      color: #4f5e72;
+    }
+
+    footer {
+      background: #061d3c;
+      color: white;
+      text-align: center;
+      padding: 30px 18px;
+      border-top: 4px solid var(--gold);
+    }
+
+    footer h3 {
+      color: var(--gold);
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: #d8e1ee;
+      margin-top: 8px;
+    }
+
+    .credit {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #294365;
+      font-weight: bold;
+      color: var(--gold);
+    }
+
+    @media (max-width: 600px) {
+      .topbar {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .brand {
+        justify-content: center;
+      }
+
+      nav {
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .hero {
+        padding: 55px 18px;
+      }
+
+      main {
+        padding: 32px 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="topbar">
+      <a class="brand" href="#home" aria-label="Kiluani Glory Academy home">
+        <div class="school-symbol" aria-hidden="true">✦</div>
+        <div>
+          <h1>KILUANI GLORY ACADEMY</h1>
+          <p>GOD IS OUR LIGHT</p>
+        </div>
+      </a>
+
+      <nav aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#community">Community</a>
+        <a href="#news">School News</a>
+        <a href="#alumni">Alumni</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div class="eyebrow">Faith • Knowledge • Excellence</div>
+      <h2>Welcome to <span>Kiluani Glory Academy</span></h2>
+      <p>
+        A place where faith inspires learning, knowledge opens doors,
+        and every member of our school community has a place to belong.
+      </p>
+      <a class="btn btn-gold" href="#about">Discover Our Academy</a>
+      <a class="btn btn-outline" href="#community">Our Community</a>
+    </div>
+  </section>
+
+  <main>
+    <section id="about">
+      <div class="section-heading">
+        <h2>Welcome to Our School Family</h2>
+        <p>One academy. One community. A shared future.</p>
+      </div>
+
+      <div class="welcome">
+        <h3>Dear Students, Alumni, Teachers, Parents and Founders,</h3>
+        <p>
+          Welcome to the digital home of Kiluani Glory Academy.
+          This website is intended to keep our school family connected,
+          celebrate achievements, share important school news, and
+          preserve the memories and progress of our community.
+          Together, let us continue to uphold our motto:
+          <strong>GOD IS OUR LIGHT.</strong>
+        </p>
+      </div>
+    </section>
+
+    <section id="community">
+      <div class="section-heading">
+        <h2>Our School Community</h2>
+        <p>Every member contributes to our shared story.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="symbol" aria-hidden="true">🎓</div>
+          <h3>Current Students</h3>
+          <p>A space to stay connected with school activities, announcements and achievements.</p>
+        </article>
+
+        <article class="card">
+          <div class="symbol" aria-hidden="true">🏅</div>
+          <h3>Our Alumni</h3>
+          <p>Celebrate former students' milestones, careers, service and accomplishments.</p>
+        </article>
+
+        <article class="card">
+          <div class="symbol" aria-hidden="true">📚</div>
+          <h3>Teachers</h3>
+          <p>Recognising the educators who guide, inspire and support our learners.</p>
+        </article>
+
+        <article class="card">
+          <div class="symbol" aria-hidden="true">🤝</div>
+          <h3>Parents & Founders</h3>
+          <p>Honouring the families and founders who help build our school community.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="news">
+      <div class="section-heading">
+        <h2>School News & Announcements</h2>
+        <p>Updates from Kiluani Glory Academy.</p>
+      </div>
+
+      <div class="empty-state">
+        <strong>School news will appear here.</strong>
+        Official announcements and updates can be added as the website develops.
+      </div>
+    </section>
+
+    <section id="alumni">
+      <div class="section-heading">
+        <h2>Alumni Achievements</h2>
+        <p>Our former students continue to write the academy's story.</p>
+      </div>
+
+      <div class="empty-state">
+        <strong>Celebrate an alumnus or alumna.</strong>
+        Achievement stories will be published here after a submission
+        and approval system is added.
+      </div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <h2>Our Values</h2>
+        <p>The principles that guide our school family.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card activity-card">
+          <span class="tag">FAITH</span>
+          <h3>God Is Our Light</h3>
+          <p>Keeping faith and good character at the heart of our journey.</p>
+        </article>
+
+        <article class="card activity-card">
+          <span class="tag">LEARNING</span>
+          <h3>Knowledge & Growth</h3>
+          <p>Encouraging curiosity, discipline and a commitment to excellence.</p>
+        </article>
+
+        <article class="card activity-card">
+          <span class="tag">UNITY</span>
+          <h3>One Community</h3>
+          <p>Building lasting connections across generations of our school family.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <h3>KILUANI GLORY ACADEMY</h3>
+    <p>GOD IS OUR LIGHT</p>
+    <p>Faith in God. Commitment to learning. Unity in community.</p>
+    <p class="credit">Website proudly powered by Edward Parorit.</p>
+  </footer>
+</body>
+</html>
