@@ -332,6 +332,21 @@
   </style>
 </head>
 
+  import { createClient } from
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL =
+ "https://gwekgghmkufzhbucbpga.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_GW-IGK0MMqg_fZmibkX9qg_tdiEBgnQ";
+
+  const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  window.schoolSupabase = supabase;
+  console.log("Kiluani Glory Academy connected to Supabase client.");
+</script>
 <body>
   <header>
     <div class="topbar">
@@ -478,5 +493,26 @@
     <p>Faith in God. Commitment to learning. Unity in community.</p>
     <p class="credit">Website proudly powered by Edward Parorit.</p>
   </footer>
+
+<script type="module">
+  import { createClient } from
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL =
+    "https://gwekgghmkufzhbucbpga.supabase.co";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_GW-IGK0MMqg_fZmibkX9qg_tdiEBgnQ";
+
+  const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  window.schoolSupabase = supabase;
+
+  console.log("Kiluani Glory Academy Supabase client initialized.");
+</script>
 </body>
 </html>
+
