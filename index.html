@@ -617,6 +617,28 @@ document.addEventListener("DOMContentLoaded", async function () {
     </button>
   </form>
 
+<div id="admin-news-tools" hidden>
+  <hr style="border-color:#c9a227;margin:24px 0;">
+  <h3 style="color:#d4af37;">Publish School News</h3>
+
+  <form id="publish-news-form">
+    <label for="news-title">News headline</label>
+    <input id="news-title" type="text" required maxlength="200"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+
+    <label for="news-content">Announcement</label>
+    <textarea id="news-content" required rows="5" maxlength="10000"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"></textarea>
+
+    <button type="submit"
+      style="padding:12px 20px;background:#d4af37;color:#111;border:0;border-radius:6px;">
+      Publish News
+    </button>
+  </form>
+
+  <p id="publish-news-status" role="status"></p>
+</div>
+
   <p id="admin-status" role="status">Please sign in with your administrator account.</p>
 </section>
 
@@ -660,9 +682,11 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    status.textContent =
-      "Administrator verified. Login is working successfully.";
-    form.reset();
+document.getElementById("admin-news-tools").hidden = false;
+status.textContent =
+  "Administrator verified. Login is working successfully.";
+form.reset();
+
   });
 });
 </script>
