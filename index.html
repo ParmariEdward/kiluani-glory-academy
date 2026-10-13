@@ -619,6 +619,54 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   <p id="admin-status" role="status">Please sign in with your administrator account.</p>
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("admin-login-form");
+  const status = document.getElementById("admin-status");
+
+  if (!form || !status) return;
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const supabase = window.schoolSupabase;
+
+    if (!supabase) {
+      status.textContent = "Connection error. Please try again later.";
+      return;
+    }
+
+    const email = document.getElementById("admin-email").value.trim();
+    const password = document.getElementById("admin-password").value;
+
+    status.textContent = "Checking your login...";
+
+    const { error: loginError } =
+      await supabase.auth.signInWithPassword({ email, password });
+
+    if (loginError) {
+      status.textContent = "Login failed. Check your email and password.";
+      return;
+    }
+
+    const { data: isAdmin, error: adminError } =
+      await supabase.rpc("is_site_admin");
+
+    if (adminError || isAdmin !== true) {
+      await supabase.auth.signOut();
+      status.textContent =
+        "This account is not authorized to access the admin dashboard.";
+      return;
+    }
+
+    status.textContent =
+      "Administrator verified. Login is working successfully.";
+    form.reset();
+  });
+});
+</script>
+
 </body>
 </html>
 
