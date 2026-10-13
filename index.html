@@ -763,6 +763,57 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const alumniForm = document.getElementById("publish-alumni-form");
+  const alumniStatus = document.getElementById("publish-alumni-status");
+
+  if (!alumniForm || !alumniStatus) return;
+
+  alumniForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const supabase = window.schoolSupabase;
+    const name = document.getElementById("alumnus-name").value.trim();
+    const achievement = document.getElementById("alumni-achievement").value.trim();
+
+    if (!supabase || !name || !achievement) {
+      alumniStatus.textContent = "Please enter the name and achievement.";
+      return;
+    }
+
+    alumniStatus.textContent = "Publishing achievement...";
+
+    const { data: isAdmin, error: adminError } =
+      await supabase.rpc("is_site_admin");
+
+    if (adminError || isAdmin !== true) {
+      alumniStatus.textContent =
+        "Administrator verification failed. Please sign in again.";
+      return;
+    }
+
+    const { error } = await supabase
+      .from("alumni_achievements")
+      .insert({
+        alumnus_name: name,
+        achievement: achievement
+      });
+
+    if (error) {
+      alumniStatus.textContent =
+        "Publishing failed. Please check database permissions.";
+      console.error("Alumni publishing error:", error);
+      return;
+    }
+
+    alumniForm.reset();
+    alumniStatus.textContent =
+      "Alumni achievement published successfully!";
+  });
+});
+</script>
+
 </body>
 </html>
 
