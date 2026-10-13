@@ -598,7 +598,27 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 });
 </script>
+<!-- ADMIN DASHBOARD -->
+<section id="admin-dashboard" style="max-width:700px;margin:40px auto;padding:20px;background:#111;color:#fff;border:1px solid #c9a227;border-radius:12px;">
+  <h2 style="color:#d4af37;">Kiluani Glory Academy — Admin</h2>
+  <p>Sign in to manage school news and alumni achievements.</p>
 
+  <form id="admin-login-form">
+    <label for="admin-email">Email</label>
+    <input id="admin-email" type="email" required autocomplete="username"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+
+    <label for="admin-password">Password</label>
+    <input id="admin-password" type="password" required autocomplete="current-password"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+
+    <button type="submit" style="padding:12px 20px;background:#d4af37;color:#111;border:0;border-radius:6px;">
+      Sign in
+    </button>
+  </form>
+
+  <p id="admin-status" role="status">Please sign in with your administrator account.</p>
+</section>
 </body>
 </html>
 
