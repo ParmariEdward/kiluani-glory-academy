@@ -691,6 +691,55 @@ form.reset();
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const newsForm = document.getElementById("publish-news-form");
+  const newsStatus = document.getElementById("publish-news-status");
+
+  if (!newsForm || !newsStatus) return;
+
+  newsForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const supabase = window.schoolSupabase;
+    const title = document.getElementById("news-title").value.trim();
+    const content = document.getElementById("news-content").value.trim();
+
+    if (!supabase || !title || !content) {
+      newsStatus.textContent = "Please enter a headline and announcement.";
+      return;
+    }
+
+    newsStatus.textContent = "Publishing...";
+
+    const { data: isAdmin, error: adminError } =
+      await supabase.rpc("is_site_admin");
+
+    if (adminError || isAdmin !== true) {
+      newsStatus.textContent = "Administrator verification failed. Please sign in again.";
+      return;
+    }
+
+    const { error } = await supabase
+      .from("school_news")
+      .insert({
+        title: title,
+        content: content,
+        published: true
+      });
+
+    if (error) {
+      newsStatus.textContent = "Publishing failed. Please check the database permissions.";
+      console.error("News publishing error:", error);
+      return;
+    }
+
+    newsForm.reset();
+    newsStatus.textContent = "School news published successfully!";
+  });
+});
+</script>
+
 </body>
 </html>
 
