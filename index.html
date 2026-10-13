@@ -370,6 +370,37 @@
     </div>
   </header>
 
+<section id="member-portal" class="section">
+  <div class="container">
+    <h2>School Member Portal</h2>
+    <p>Register as a student, alumnus, teacher, parent, or founder. Your account will require administrator approval.</p>
+
+    <form id="member-registration-form">
+      <label for="member-full-name">Full name</label>
+      <input id="member-full-name" type="text" required>
+
+      <label for="member-email">Email address</label>
+      <input id="member-email" type="email" required>
+
+      <label for="member-password">Password</label>
+      <input id="member-password" type="password" minlength="8" required>
+
+      <label for="member-role">I am registering as a</label>
+      <select id="member-role" required>
+        <option value="">Choose your role</option>
+        <option value="student">Current student</option>
+        <option value="alumni">Alumni</option>
+        <option value="teacher">Teacher</option>
+        <option value="parent">Parent</option>
+        <option value="founder">Founder</option>
+      </select>
+
+      <button type="submit">Register</button>
+      <p id="member-registration-status" role="status"></p>
+    </form>
+  </div>
+</section>
+
   <section class="hero" id="home">
     <div class="hero-inner">
       <div class="eyebrow">Faith • Knowledge • Excellence</div>
