@@ -639,6 +639,28 @@ document.addEventListener("DOMContentLoaded", async function () {
   <p id="publish-news-status" role="status"></p>
 </div>
 
+<div id="admin-alumni-tools" hidden>
+  <hr style="border-color:#c9a227;margin:24px 0;">
+  <h3 style="color:#d4af37;">Add Alumni Achievement</h3>
+
+  <form id="publish-alumni-form">
+    <label for="alumnus-name">Alumnus or Alumna Name</label>
+    <input id="alumnus-name" type="text" required maxlength="200"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+
+    <label for="alumni-achievement">Achievement</label>
+    <textarea id="alumni-achievement" required rows="5" maxlength="10000"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"></textarea>
+
+    <button type="submit"
+      style="padding:12px 20px;background:#d4af37;color:#111;border:0;border-radius:6px;">
+      Publish Achievement
+    </button>
+  </form>
+
+  <p id="publish-alumni-status" role="status"></p>
+</div>
+
   <p id="admin-status" role="status">Please sign in with your administrator account.</p>
 </section>
 
