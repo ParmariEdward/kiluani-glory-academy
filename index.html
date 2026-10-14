@@ -364,11 +364,17 @@
 
       status.textContent = "Registering...";
 
-      try {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password
-        });
+      
+try {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo:
+        "https://parmariedward.github.io/kiluani-glory-academy/"
+    }
+  });
+  
 
         if (error) throw error;
 
