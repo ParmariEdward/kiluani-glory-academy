@@ -350,45 +350,47 @@
   console.log("Kiluani Glory Academy connected to Supabase client.");
 
   // School member registration
-  const memberForm = document.getElementById("member-registration-form");
-
-  if (memberForm) {
-    memberForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const status = document.getElementById("member-registration-status");
-      const fullName = document.getElementById("member-full-name").value.trim();
-      const email = document.getElementById("member-email").value.trim();
-      const password = document.getElementById("member-password").value;
-      const role = document.getElementById("member-role").value;
-
-      status.textContent = "Registering...";
-
-      
-
-options: {
-  emailRedirectTo:
-    "https://parmariedward.github.io/kiluani-glory-academy/",
-  data: {
-    full_name: fullName,
-    school_role: role
-  }
-}
-      
   
+const memberForm = document.getElementById("member-registration-form");
 
-        if (error) throw error;
+if (memberForm) {
+  memberForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-      
-        status.textContent =
-          "Registration submitted. Verify your email if requested, then wait for administrator approval.";
+    const status = document.getElementById("member-registration-status");
+    const fullName = document.getElementById("member-full-name").value.trim();
+    const email = document.getElementById("member-email").value.trim();
+    const password = document.getElementById("member-password").value;
+    const role = document.getElementById("member-role").value;
 
-        memberForm.reset();
-      } catch (error) {
-        status.textContent = "Registration failed: " + error.message;
-      }
-    });
-  }
+    status.textContent = "Registering...";
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          emailRedirectTo:
+            "https://parmariedward.github.io/kiluani-glory-academy/",
+          data: {
+            full_name: fullName,
+            school_role: role
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      status.textContent =
+        "Registration submitted. Verify your email if requested, then wait for administrator approval.";
+
+      memberForm.reset();
+    } catch (error) {
+      status.textContent = "Registration failed: " + error.message;
+    }
+  });
+}
+  
 
 </script>
 <body>
