@@ -365,36 +365,21 @@
       status.textContent = "Registering...";
 
       
-try {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo:
-        "https://parmariedward.github.io/kiluani-glory-academy/"
-    }
-  });
+
+options: {
+  emailRedirectTo:
+    "https://parmariedward.github.io/kiluani-glory-academy/",
+  data: {
+    full_name: fullName,
+    school_role: role
+  }
+}
+      
   
 
         if (error) throw error;
 
-        if (data.user) {
-          const { error: profileError } = await supabase
-            .from("member_profiles")
-            .insert({
-              id: data.user.id,
-              full_name: fullName,
-              school_role: role,
-              approval_status: "pending"
-            });
-
-          if (profileError) {
-            status.textContent =
-              "Your account was created, but profile setup needs help. Contact the administrator.";
-            return;
-          }
-        }
-
+      
         status.textContent =
           "Registration submitted. Verify your email if requested, then wait for administrator approval.";
 
