@@ -388,7 +388,46 @@ if (memberForm) {
     }
   });
 }
-  
+  // MEMBER LOGIN — APPROVED MEMBERS ONLY
+const memberLoginForm = document.getElementById("member-login-form");
+
+if (memberLoginForm) {
+memberLoginForm.addEventListener("submit", async (event) => {
+event.preventDefault();
+
+const loginStatus = document.getElementById("member-login-status");
+const email = document.getElementById("login-member-email").value.trim();
+const password = document.getElementById("login-member-password").value;
+
+loginStatus.textContent = "Checking your login...";
+
+try {
+  const { error: loginError } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (loginError) throw loginError;
+
+  const { data: profile, error: profileError } = await supabase
+    .from("member_profiles")
+    .select("approval_status")
+    .single();
+
+  if (profileError || !profile || profile.approval_status !== "approved") {
+    await supabase.auth.signOut();
+    loginStatus.textContent =
+      "Your account is awaiting administrator approval.";
+    return;
+  }
+
+  loginStatus.textContent = "Login successful. Welcome to the school portal!";
+} catch (error) {
+  loginStatus.textContent = "Login failed: " + error.message;
+}
+
+});
+  }
 
   
   
@@ -442,7 +481,18 @@ if (memberForm) {
 
       <button type="submit">Register</button>
       <p id="member-registration-status" role="status"></p>
-    </form>
+    </form> 
+    <h3>Member Login</h3>
+<form id="member-login-form">
+  <label for="login-member-email">Email address</label>
+  <input id="login-member-email" type="email" required>
+
+  <label for="login-member-password">Password</label>
+  <input id="login-member-password" type="password" required>
+
+  <button type="submit">Sign In</button>
+  <p id="member-login-status" role="status"></p>
+</form>
   </div>
 </section>
 
