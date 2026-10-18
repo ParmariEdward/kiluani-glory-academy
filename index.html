@@ -547,14 +547,8 @@ if (memberLoginForm) {
         .eq("id", user.id)
         .maybeSingle();
 
-      if (profileError) throw profileError;
-
-      if (!profile || profile.approval_status !== "approved") {
-        await supabase.auth.signOut();
-        status.textContent =
-          "Your account is awaiting administrator approval.";
-        return;
-      }
+       if (profileError) throw profileError;
+if (!profile) throw new Error("Member profile not found.");
 
       status.textContent = "Login successful!";
       showMemberDashboard(profile, user.email || email);
