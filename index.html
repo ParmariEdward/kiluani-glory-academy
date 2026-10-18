@@ -563,8 +563,18 @@ function renderPage(page, profile, email) {
         const user = sessionData.user;
         if (!user) throw new Error("Please log in again.");
 
-        status.textContent =
-          "Your form is ready, but submission needs the exact alumni_achievements table columns and insert policies to be connected.";
+        const { error: insertError } = await supabase
+  .from("alumni_achievements")
+  .insert({
+    alumnus_name: profile.full_name || "School Member",
+    achievement: title + "\n\n" + description,
+    approval_status: "pending"
+  });
+
+if (insertError) throw insertError;
+
+status.textContent = "Achievement submitted successfully for review!";
+achievementForm.reset();
 
       } catch (error) {
         status.textContent = "Could not submit: " + error.message;
