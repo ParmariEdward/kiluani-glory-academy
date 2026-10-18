@@ -473,52 +473,104 @@ function renderPage(page, profile, email) {
   const content = document.getElementById("kga-page");
   if (!content) return;
 
+  const safe = value => escapeMemberText(value || "");
+
   const pages = {
     "Dashboard": `
-      <h2>Member Dashboard</h2>
-      <p>Welcome to your Kiluani Glory Academy members' area.</p>
-      <p>Use the menu above to explore the portal.</p>
+      <h2>Welcome to Kiluani Glory Academy</h2>
+      <p>Your school portal is ready to explore.</p>
+      <p><strong>Member:</strong> ${safe(profile.full_name)}</p>
+      <p><strong>Role:</strong> ${safe(profile.school_role)}</p>
+      <p>Use the menu to access school community information and resources.</p>
     `,
+
     "School Community": `
       <h2>School Community</h2>
-      <p>Connect with students, alumni, teachers, parents and founders.</p>
+      <p>Welcome to our community of students, alumni, teachers, parents and founders.</p>
+      <h3>Our Motto</h3>
+      <p><strong>GOD IS OUR LIGHT</strong></p>
+      <p>Keep connected with Kiluani Glory Academy and its community.</p>
     `,
+
     "Messages & Discussions": `
       <h2>Messages & Discussions</h2>
-      <p>The discussion service needs to be connected before members can exchange messages.</p>
+      <p>Members can use this section for school-related discussions.</p>
+      <p><em>Live messaging is not connected yet. It requires a messages table and appropriate Supabase access policies.</em></p>
     `,
+
     "Learning Resources": `
       <h2>Learning Resources</h2>
-      <p>Learning materials can be added here.</p>
+      <p>Learning materials and study resources will be organised here.</p>
+      <p><em>Resources will appear here when they are added and connected to the portal.</em></p>
     `,
+
     "Members' Announcements": `
       <h2>Members' Announcements</h2>
-      <p>Members-only announcements can be displayed here once connected to the database.</p>
+      <p>Important information for the school community.</p>
+      <p><em>Member-only announcements need a dedicated database table and access policies before live announcements can appear here.</em></p>
     `,
+
     "Share an Achievement": `
       <h2>Share an Achievement</h2>
-      <p>Achievement submission and administrator approval still need to be connected.</p>
+      <p>Celebrate your school or personal achievements with the Kiluani Glory Academy community.</p>
+      <form id="kga-achievement-form">
+        <label for="kga-achievement-title">Achievement title</label><br>
+        <input id="kga-achievement-title" required maxlength="150"
+          style="box-sizing:border-box;width:100%;padding:10px;margin:8px 0"><br>
+
+        <label for="kga-achievement-description">Description</label><br>
+        <textarea id="kga-achievement-description" required maxlength="3000"
+          style="box-sizing:border-box;width:100%;padding:10px;margin:8px 0"></textarea><br>
+
+        <button type="submit"
+          style="padding:12px;background:#092b59;color:white;border:0;border-radius:6px">
+          Submit Achievement
+        </button>
+        <p id="kga-achievement-status" role="status"></p>
+      </form>
     `,
+
     "My Profile": `
       <h2>My Profile</h2>
-      <p><strong>Name:</strong> ${escapeMemberText(profile.full_name || "")}</p>
-      <p><strong>Role:</strong> ${escapeMemberText(profile.school_role || "")}</p>
-      <p><strong>Email:</strong> ${escapeMemberText(email || "")}</p>
-      <p><strong>Approval:</strong> Approved</p>
+      <p><strong>Name:</strong> ${safe(profile.full_name)}</p>
+      <p><strong>Role:</strong> ${safe(profile.school_role)}</p>
+      <p><strong>Email:</strong> ${safe(email)}</p>
+      <p><strong>Portal access:</strong> Active</p>
     `
   };
 
   content.innerHTML = pages[page] || pages["Dashboard"];
-}
 
-function escapeMemberText(value) {
-  return String(value).replace(/[&<>"']/g, character => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[character]);
+  const achievementForm = document.getElementById("kga-achievement-form");
+
+  if (achievementForm) {
+    achievementForm.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const status = document.getElementById("kga-achievement-status");
+      const title = document.getElementById("kga-achievement-title").value.trim();
+      const description =
+        document.getElementById("kga-achievement-description").value.trim();
+
+      status.textContent = "Checking your session...";
+
+      try {
+        const { data: sessionData, error: sessionError } =
+          await supabase.auth.getUser();
+
+        if (sessionError) throw sessionError;
+
+        const user = sessionData.user;
+        if (!user) throw new Error("Please log in again.");
+
+        status.textContent =
+          "Your form is ready, but submission needs the exact alumni_achievements table columns and insert policies to be connected.";
+
+      } catch (error) {
+        status.textContent = "Could not submit: " + error.message;
+      }
+    });
+  }
 }
 
 const memberLoginForm = document.getElementById("member-login-form");
