@@ -389,44 +389,180 @@ if (memberForm) {
   });
 }
   // MEMBER LOGIN — APPROVED MEMBERS ONLY
+function showMemberDashboard(profile, email) {
+  let dashboard = document.getElementById("kga-member-dashboard");
+
+  if (!dashboard) {
+    dashboard = document.createElement("div");
+    dashboard.id = "kga-member-dashboard";
+
+    dashboard.style.cssText = `
+      position:fixed; inset:0; z-index:99999;
+      overflow:auto; background:#f4f7fb;
+      color:#092b59; font-family:Arial,sans-serif;
+    `;
+
+    dashboard.innerHTML = `
+      <header style="background:#092b59;color:white;padding:22px">
+        <h2 style="margin:0">KILUANI GLORY ACADEMY</h2>
+        <p style="color:#e7b943;margin-bottom:0">GOD IS OUR LIGHT</p>
+      </header>
+
+      <div style="padding:20px;max-width:1000px;margin:auto">
+        <h2 id="kga-welcome">Welcome</h2>
+        <p id="kga-member-details"></p>
+
+        <nav style="display:flex;flex-wrap:wrap;gap:8px;margin:20px 0">
+          <button data-page="Dashboard">Dashboard</button>
+          <button data-page="School Community">School Community</button>
+          <button data-page="Messages & Discussions">Messages & Discussions</button>
+          <button data-page="Learning Resources">Learning Resources</button>
+          <button data-page="Members' Announcements">Members' Announcements</button>
+          <button data-page="Share an Achievement">Share an Achievement</button>
+          <button data-page="My Profile">My Profile</button>
+          <button id="kga-signout">Sign Out</button>
+        </nav>
+
+        <section id="kga-page"
+          style="background:white;padding:22px;border-radius:12px">
+        </section>
+
+        <p style="margin-top:30px">
+          Website proudly powered by Edward Parorit.
+        </p>
+      </div>
+    `;
+
+    document.body.appendChild(dashboard);
+
+    dashboard.querySelectorAll("[data-page]").forEach(button => {
+      button.style.cssText =
+        "padding:12px;border:0;border-radius:6px;background:#092b59;color:white";
+
+      button.addEventListener("click", () => {
+        renderPage(button.dataset.page, profile, email);
+      });
+    });
+
+    dashboard.querySelector("#kga-signout").style.cssText =
+      "padding:12px;border:0;border-radius:6px;background:#b42318;color:white";
+
+    dashboard.querySelector("#kga-signout").addEventListener("click", async () => {
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        alert("Sign out failed: " + error.message);
+        return;
+      }
+
+      dashboard.remove();
+      location.reload();
+    });
+  }
+
+  dashboard.querySelector("#kga-welcome").textContent =
+    "Welcome, " + (profile.full_name || "School Member");
+
+  dashboard.querySelector("#kga-member-details").textContent =
+    (profile.school_role || "Member") + " • " + email;
+
+  renderPage("Dashboard", profile, email);
+}
+
+function renderPage(page, profile, email) {
+  const content = document.getElementById("kga-page");
+  if (!content) return;
+
+  const pages = {
+    "Dashboard": `
+      <h2>Member Dashboard</h2>
+      <p>Welcome to your Kiluani Glory Academy members' area.</p>
+      <p>Use the menu above to explore the portal.</p>
+    `,
+    "School Community": `
+      <h2>School Community</h2>
+      <p>Connect with students, alumni, teachers, parents and founders.</p>
+    `,
+    "Messages & Discussions": `
+      <h2>Messages & Discussions</h2>
+      <p>The discussion service needs to be connected before members can exchange messages.</p>
+    `,
+    "Learning Resources": `
+      <h2>Learning Resources</h2>
+      <p>Learning materials can be added here.</p>
+    `,
+    "Members' Announcements": `
+      <h2>Members' Announcements</h2>
+      <p>Members-only announcements can be displayed here once connected to the database.</p>
+    `,
+    "Share an Achievement": `
+      <h2>Share an Achievement</h2>
+      <p>Achievement submission and administrator approval still need to be connected.</p>
+    `,
+    "My Profile": `
+      <h2>My Profile</h2>
+      <p><strong>Name:</strong> ${escapeMemberText(profile.full_name || "")}</p>
+      <p><strong>Role:</strong> ${escapeMemberText(profile.school_role || "")}</p>
+      <p><strong>Email:</strong> ${escapeMemberText(email || "")}</p>
+      <p><strong>Approval:</strong> Approved</p>
+    `
+  };
+
+  content.innerHTML = pages[page] || pages["Dashboard"];
+}
+
+function escapeMemberText(value) {
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
 const memberLoginForm = document.getElementById("member-login-form");
 
 if (memberLoginForm) {
-memberLoginForm.addEventListener("submit", async (event) => {
-event.preventDefault();
+  memberLoginForm.addEventListener("submit", async event => {
+    event.preventDefault();
 
-const loginStatus = document.getElementById("member-login-status");
-const email = document.getElementById("login-member-email").value.trim();
-const password = document.getElementById("login-member-password").value;
+    const status = document.getElementById("member-login-status");
+    const email = document.getElementById("login-member-email").value.trim();
+    const password = document.getElementById("login-member-password").value;
 
-loginStatus.textContent = "Checking your login...";
+    status.textContent = "Checking your login...";
 
-try {
-  const { error: loginError } = await supabase.auth.signInWithPassword({
-    email,
-    password
+    try {
+      const { data, error: loginError } =
+        await supabase.auth.signInWithPassword({ email, password });
+
+      if (loginError) throw loginError;
+
+      const user = data.user;
+
+      const { data: profile, error: profileError } = await supabase
+        .from("member_profiles")
+        .select("full_name, school_role, approval_status")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (profileError) throw profileError;
+
+      if (!profile || profile.approval_status !== "approved") {
+        await supabase.auth.signOut();
+        status.textContent =
+          "Your account is awaiting administrator approval.";
+        return;
+      }
+
+      status.textContent = "Login successful!";
+      showMemberDashboard(profile, user.email || email);
+
+    } catch (error) {
+      status.textContent = "Login failed: " + error.message;
+    }
   });
-
-  if (loginError) throw loginError;
-
-  const { data: profile, error: profileError } = await supabase
-    .from("member_profiles")
-    .select("approval_status")
-    .single();
-
-  if (profileError || !profile || profile.approval_status !== "approved") {
-    await supabase.auth.signOut();
-    loginStatus.textContent =
-      "Your account is awaiting administrator approval.";
-    return;
-  }
-
-  loginStatus.textContent = "Login successful. Welcome to the school portal!";
-} catch (error) {
-  loginStatus.textContent = "Login failed: " + error.message;
-}
-
-});
   }
 
   
